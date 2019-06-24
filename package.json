@@ -1,0 +1,26 @@
+{
+  "name": "sr-data-manipulator",
+  "version": "0.1.0",
+  "description": "Implementation of Enum and Pipeline for JS",
+  "main": "source/manipulation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neunyan/SR_Data_Manipulator.git"
+  },
+  "keywords": [
+    "enum",
+    "enumerate",
+    "pipeline",
+    "promise"
+  ],
+  "author": "neunyan",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "expect": "^24.8.0",
+    "sinon": "^7.3.2"
+  }
+}
