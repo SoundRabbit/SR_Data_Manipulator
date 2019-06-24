@@ -26,16 +26,20 @@ const Enum = function (...tags) {
         });
 
     for(const tag of tags) {
-        const symbol = Symbol(tag);
-        this[tag] = function(val){
-            this.name = () => tag;
+        const stringifyTag = String(tag);
+        if(stringifyTag.length > 0 && stringifyTag[0] == '$') {
+            throw $Err(`Tag name : "${stringifyTag}" has unpermitted token. Tag name should begin with a character EXCEPT '$'.`);
+        }
+        const symbol = Symbol(stringifyTag);
+        this[stringifyTag] = function(val){
+            this.name = () => stringifyTag;
             this.value = () => val;
             this.expect = expectMehodGen(expectMehodGen, symbol, val);
             this.tag = () => symbol;
             this.is = $ => $ == symbol;
             Object.freeze(this);
         };
-        this['$'+tag] = symbol;
+        this['$'+stringifyTag] = symbol;
     }
     Object.freeze(this);
 }
@@ -44,7 +48,7 @@ const match = enumeratable => ({
     with: candidate => {
         const tag = enumeratable.tag();
         if(tag in candidate) {return candidate[tag](enumeratable.value())}
-        if("_" in candidate) {return candidate['_'](enumeratable.value())}
+        if('_' in candidate) {return candidate['_'](enumeratable.value())}
         throw "no candidate was matched.";
     }
 })
