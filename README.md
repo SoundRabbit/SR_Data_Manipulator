@@ -24,7 +24,6 @@ console.log(foo.tag() == Symbol("you")) //false
 
 // "$" + [tag name] means Sybom of each tags
 console.log(foo.tag() == OriginalEnum.$you) //true
-
 ```
 
 ## What's this ?
