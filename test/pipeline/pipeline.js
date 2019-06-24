@@ -7,25 +7,25 @@ describe("Pipeline", () => {
     const aFunctionNeedsTooLongTime = (time, res) =>
         new Promise((resolve, _) => setTimeout(()=>resolve(res), time));
 
-    it("アダプタ無し", async () => {
+    it("non process", async () => {
         const pipeline = new Pipe(1);
         assert.equal(await pipeline.result(), 1);
     });
 
-    it("何もしないアダプタ", async () => {
+    it("all pass process", async () => {
         const pipeline = new Pipe(1);
         const result = await pipeline.$($=>$).result();
         assert.equal(result , 1);
     });
 
-    it("1秒間何もしないタスク", async () => {
+    it("return double of arg afater sleeping 1 sec", async () => {
         const result = await (new Pipe(1)).$(async $=>await aFunctionNeedsTooLongTime(1*1000, $ + 1)).result();
         assert.equal(result , 2);
     });
 
-    it("エラーの伝搬", async () => {
+    it("transmission of exception", async () => {
         try{
-            const result = await (new Pipe(1)).$(async $=>{throw "err1"}).$($=>$).result();
+            const result = await (new Pipe(1)).$(async $=>{throw "err1"}).$($=>$).$($=>aFunctionNeedsTooLongTime(1*1000, $ + 1)).result();
         }catch(err){
             assert.equal(err , "err1");
         }
