@@ -3,6 +3,8 @@ const {Result} = require("../enumerate")
 
 module.exports.$ = (process, data) => maybeFunction(process)(data);
 module.exports.R = (process, data) =>
-    data.expect(Result.$Ok)
-    .then(maybeFunction(process)(data.value()))
-    .catch($=>$)
+    "tag" in data && "value" in data && typeof data.tag == "function" && typeof data.value == "function"?
+        data.expect(Result.$Err)
+        .then($=>$)
+        .catch(maybeFunction(process)(data.value())) :
+        data;
