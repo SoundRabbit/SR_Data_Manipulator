@@ -26,7 +26,11 @@ console.log(foo.tag() == Symbol("you")) //false
 console.log(foo.tag() == OriginalEnum.$you) //true
 ```
 
-<!-- ## How to install  -->
+## How to install
+
+```bash
+> npm install sr-data-manipulator
+```
 
 ## What's this
 
