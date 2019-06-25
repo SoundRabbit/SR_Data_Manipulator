@@ -1,5 +1,7 @@
 # SR_Data_Manipulator
 
+[![Build Status](https://travis-ci.org/neunyan/SR_Data_Manipulator.svg?branch=master)](https://travis-ci.org/neunyan/SR_Data_Manipulator)
+
 ``` js
 const response = new Result.Ok("You can use \"Enum\" on JavaScript !");
 
