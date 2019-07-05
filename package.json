@@ -1,6 +1,6 @@
 {
   "name": "sr-data-manipulator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Implementation of Enum and Pipeline for JS",
   "main": "source/manipulation.js",
   "scripts": {
