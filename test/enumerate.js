@@ -25,17 +25,17 @@ describe("Enum", () => {
         const state1 = new Enum("first", "second", "third", "last");
         const state2 = new Enum("first", "second", "third", "last");
         it("same tag", () => {
-            assert.equal((new state1.first()).tag(), state1.$first);
+            assert.equal((new state1.first()).tag, state1.$first);
         });
         it("different tag of same enum", () => {
-            assert.notEqual((new state1.first().tag()), (new state1.second()).tag());
+            assert.notEqual((new state1.first().tag, (new state1.second()).tag));
         });
         it("same name tag of differant enum", () => {
-            assert.notEqual((new state1.first().tag()), (new state2.second().tag()));
+            assert.notEqual((new state1.first().tag, (new state2.second().tag)));
         });
 
         it("different tag of differant enum", () => {
-            assert.notEqual((new state1.first()).tag(), (new state2.second()).tag());
+            assert.notEqual((new state1.first()).tag, (new state2.second()).tag);
         });
     });
 });
