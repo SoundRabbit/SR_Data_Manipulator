@@ -1,6 +1,9 @@
 # SR_Data_Manipulator
 
+
 ``` js
+const {Result, match} = require("sr-data-manipulator");
+
 const response = new Result.Ok("You can use \"Enum\" on JavaScript !");
 
 match(response).with({
@@ -12,25 +15,51 @@ match(response).with({
 ```
 
 ``` js
+const {Enum} = require("sr-data-manipulator");
+
 const OriginalEnum = new Enum("you", "can", "make", "original", "enum", "class");
 
 const foo = new OriginalEnum.you("Each enumeratior can have a value");
 
 // .name() method returns own tag name
-console.log(foo.name() == "you");   //true
+console.log(foo.name == "you");   //true
 
 // .tag() method returns Symbol of own tag
-console.log(foo.tag() == Symbol("you")) //false
+console.log(foo.tag == Symbol("you")) //false
 
 // "$" + [tag name] means Sybom of each tags
-console.log(foo.tag() == OriginalEnum.$you) //true
+console.log(foo.tag == OriginalEnum.$you) //true
 ```
-
-<!-- ## How to install  -->
 
 ## What's this
 
 This packege give you Enum and pipeline-process.
+
+## Caution
+
+This module is beta-version. It means that the module probably will be in radical changing.
+
+## require / import
+
+You can require all modules as follows.
+
+``` js
+// Enum
+const {Enum, match, Option, Result, resultOf, $Some, $None, $Ok, $Err} = require("sr-data-manipulator");
+
+// Pipeline
+const {Pipeline, Pipe, Adaptor:{$, R}} = require("sr-data-manipulator");
+```
+
+You can import all modules as follows.
+
+``` js
+// Enum
+import {Enum, match, Option, Result, resultOf, $Some, $None, $Ok, $Err} from "sr-data-manipulator";
+
+// Pipeline
+import {Pipeline, Pipe, Adaptor:{$, R}} from "sr-data-manipulator";
+```
 
 ### Enum
 
