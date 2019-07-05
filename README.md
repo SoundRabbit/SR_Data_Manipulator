@@ -38,10 +38,6 @@ console.log(foo.tag == OriginalEnum.$you) //true
 > npm install sr-data-manipulator
 ```
 
-## What's this
-
-This packege give you Enum and pipeline-process.
-
 ## Caution
 
 This module is beta-version. It means that the module probably will be in radical changing.
@@ -67,6 +63,10 @@ import {Enum, match, Option, Result, resultOf, $Some, $None, $Ok, $Err} from "sr
 // Pipeline
 import {Pipeline, Pipe, Adaptor:{$, R}} from "sr-data-manipulator";
 ```
+
+## What's this
+
+This packege give you Enum and pipeline-process.
 
 ### Enum
 
