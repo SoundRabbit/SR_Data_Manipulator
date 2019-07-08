@@ -1,5 +1,7 @@
 # SR_Data_Manipulator
 
+**This package has possible to be diveded into some packages, and to be cold to develop when this is version 1.0.0**
+
 [![Build Status](https://travis-ci.org/neunyan/SR_Data_Manipulator.svg?branch=master)](https://travis-ci.org/neunyan/SR_Data_Manipulator)
 
 ``` js
