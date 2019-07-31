@@ -1,5 +1,5 @@
 {
-  "name": "sr-data-manipulator",
+  "name": "sr-enum",
   "version": "0.2.1",
   "description": "Implementation of Enum and Pipeline for JS",
   "main": "source/main.js",
@@ -13,7 +13,10 @@
   "keywords": [
     "enum",
     "enumerate",
-    "pipeline",
+    "enumerator",
+    "maybe",
+    "option",
+    "result",
     "promise"
   ],
   "author": "neunyan",
