@@ -8,8 +8,6 @@ const promise = maybe =>
         [Maybe.$Just]: val => Promise.resolve(val),
         [Maybe.$Nothing]: _ => Promise.reject()
     });
-;
-
 module.exports = {
     Maybe,
     promise

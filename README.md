@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/neunyan/SR_Data_Manipulator.svg?branch=master)](https://travis-ci.org/neunyan/SR_Data_Manipulator)
 
 ``` js
-const {Result, match} = require("sr-data-manipulator");
+const {Result, match} = require("sr-enum");
 
 const response = new Result.Ok("You can use \"Enum\" on JavaScript !");
 

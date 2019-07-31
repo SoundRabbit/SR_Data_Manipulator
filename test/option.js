@@ -5,7 +5,8 @@ const { Option } = option;
 describe("Option", () => {
     describe("#promise", () => {
         it("should 4", async () => {
-            const res = await option.promise(new Option.Some(1))
+            const res = await option
+                .promise(new Option.Some(1))
                 .then($ => option.promise(new Option.Some($ + 1)))
                 .then($ => option.promise(new Option.Some($ + 1)))
                 .then($ => option.promise(new Option.Some($ + 1)))
@@ -14,7 +15,8 @@ describe("Option", () => {
         });
 
         it("should catch", async () => {
-            const res = await option.promise(new Option.Some(1))
+            const res = await option
+                .promise(new Option.Some(1))
                 .then(_ => option.promise(new Option.None()))
                 .then(_ => 1)
                 .catch(_ => 0);

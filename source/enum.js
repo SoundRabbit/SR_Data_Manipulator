@@ -5,8 +5,10 @@ class Enum {
         for (const [tagIndex, tag] of tags.entries()) {
             const tagName = String(tag);
 
-            if (tagName[0] == '$') {
-                throw $Err(`Tag name : "${stringifyTag}" has unpermitted token. Tag name should begin with a character EXCEPT '$'.`);
+            if (tagName[0] == "$") {
+                throw $Err(
+                    `Tag name : "${stringifyTag}" has unpermitted token. Tag name should begin with a character EXCEPT '$'.`
+                );
             }
 
             const tagSymbol = Symbol(tagName);

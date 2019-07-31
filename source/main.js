@@ -1,6 +1,6 @@
 const { Enum } = require("./enum");
 const maybe = require("./maybe");
-const option = require("./option")
+const option = require("./option");
 const result = require("./result");
 
 module.exports = {
@@ -8,4 +8,4 @@ module.exports = {
     maybe,
     option,
     result
-}
+};

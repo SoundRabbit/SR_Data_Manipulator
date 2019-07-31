@@ -26,17 +26,17 @@ describe("Enum", () => {
         const state1 = new Enum("first", "second", "third", "last");
         const state2 = new Enum("first", "second", "third", "last");
         it("same tag", () => {
-            assert.equal((new state1.first()).tag, state1.$first);
+            assert.equal(new state1.first().tag, state1.$first);
         });
         it("different tag of same enum", () => {
-            assert.notEqual((new state1.first().tag, (new state1.second()).tag));
+            assert.notEqual((new state1.first().tag, new state1.second().tag));
         });
         it("same name tag of differant enum", () => {
-            assert.notEqual((new state1.first().tag, (new state2.second().tag)));
+            assert.notEqual((new state1.first().tag, new state2.second().tag));
         });
 
         it("different tag of differant enum", () => {
-            assert.notEqual((new state1.first()).tag, (new state2.second()).tag);
+            assert.notEqual(new state1.first().tag, new state2.second().tag);
         });
     });
 
@@ -55,8 +55,11 @@ describe("Enum", () => {
             assert.equal(third.value, true);
         });
         it(`should return ['a', 1, true]`, () => {
-            const last = new State.Last(['a', 1, true]);
-            assert.equal(JSON.stringify(last.value), JSON.stringify(['a', 1, true]));
+            const last = new State.Last(["a", 1, true]);
+            assert.equal(
+                JSON.stringify(last.value),
+                JSON.stringify(["a", 1, true])
+            );
         });
     });
 
@@ -96,7 +99,7 @@ describe("Enum", () => {
             assert.equal(third.index, 2);
         });
         it(`should return 3`, () => {
-            const last = new State.Last(['a', 1, true]);
+            const last = new State.Last(["a", 1, true]);
             assert.equal(last.index, 3);
         });
     });

@@ -5,7 +5,8 @@ const { Maybe } = maybe;
 describe("Maybe", () => {
     describe("#promise", () => {
         it("should 4", async () => {
-            const res = await maybe.promise(new Maybe.Just(1))
+            const res = await maybe
+                .promise(new Maybe.Just(1))
                 .then($ => maybe.promise(new Maybe.Just($ + 1)))
                 .then($ => maybe.promise(new Maybe.Just($ + 1)))
                 .then($ => maybe.promise(new Maybe.Just($ + 1)))
@@ -14,7 +15,8 @@ describe("Maybe", () => {
         });
 
         it("should catch", async () => {
-            const res = await maybe.promise(new Maybe.Just(1))
+            const res = await maybe
+                .promise(new Maybe.Just(1))
                 .then(_ => maybe.promise(new Maybe.Nothing()))
                 .then(_ => 1)
                 .catch(_ => 0);

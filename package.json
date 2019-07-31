@@ -4,7 +4,8 @@
   "description": "Implementation of Enum and Pipeline for JS",
   "main": "source/main.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js"
   },
   "repository": {
     "type": "git",

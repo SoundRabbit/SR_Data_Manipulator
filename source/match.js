@@ -6,8 +6,12 @@
 const match = enumerator => ({
     with: candidate => {
         const tag = enumerator.tag;
-        if (tag in candidate) { return candidate[tag](enumerator.value) }
-        if ('_' in candidate) { return candidate['_'](enumerator.value) }
+        if (tag in candidate) {
+            return candidate[tag](enumerator.value);
+        }
+        if ("_" in candidate) {
+            return candidate["_"](enumerator.value);
+        }
         throw "no candidate was matched.";
     }
 });
