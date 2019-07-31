@@ -3,7 +3,7 @@ const assert = require("assert");
 describe("readme", () => {
     describe("Intro", () => {
         it("1", () => {
-            const { Enum } = require("sr-enum");
+            const { Enum } = require("../source/main");
 
             const OriginalEnum = new Enum(
                 "You",
@@ -31,7 +31,7 @@ describe("readme", () => {
 
     describe("Maybe", () => {
         it("promise", async () => {
-            const { Maybe, maybe } = require("sr-enum");
+            const { Maybe, maybe } = require("../source/main");
 
             const a = await maybe
                 .promise(new Maybe.Just(1))

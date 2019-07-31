@@ -5,7 +5,7 @@
   "main": "source/main.js",
   "scripts": {
     "test": "mocha",
-    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js",
+    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js"
   },
   "repository": {
     "type": "git",
