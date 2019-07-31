@@ -5,7 +5,8 @@
   "main": "source/main.js",
   "scripts": {
     "test": "mocha",
-    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js"
+    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js",
+    "postinstall": "npm link && npm link sr-enum"
   },
   "repository": {
     "type": "git",
