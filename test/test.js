@@ -1,2 +1,4 @@
-require("./enumerate");
-require("./pipeline/pipeline");
+require("./enum");
+require("./maybe");
+require("./option");
+require("./result");
