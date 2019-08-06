@@ -28,6 +28,25 @@ assert(foo.tag !== Symbol("You")); //false
 assert(foo.tag === OriginalEnum.$You); //true
 ```
 
+``` js
+const { Maybe, maybe } = require("sr-enum");
+const res = [
+    maybe
+        .$(new Maybe.Just(1))   // create method chain
+        .map(v => v + 1)        // map : (a -> b) -> Maybe b
+        .map(v => v + 1)
+        .map(v => v + 1)
+        .withDefault(0),
+    maybe
+        .$(new Maybe.Just(1))
+        .andThen(_ => new Maybe.Nothing())  // andThen : (a -> Maybe b) -> Maybe b
+        .withDefault(0)
+];
+
+assert(res[0] === 4);
+assert(res[1] === 0);
+```
+
 ## How to install
 
 ```bash
@@ -127,6 +146,50 @@ const b = await maybe
 
 assert(a === 10);
 assert(b === 100);
+```
+
+### boolean
+
+**This function is under testing, and implemented on only Maybe now**
+
+`maybe.boolean : Maybe -> Boolean`
+
+### method chain
+
+**This function is under testing, and implemented on only Maybe now**
+
+#### usage
+
+```js
+const {maybe} = require("sr-enum");
+const methodChain = maybe.$( /*some maybe value*/ );
+```
+
+#### `map`
+
+`map` adapts proc to value in `Just` and wrap in `Just` when maybe is `Just`, other times this return maybe.
+
+```js
+// it will return new Maybe.Just(2)
+maybe.$( new Maybe.Just(1) ).map(v => v + 1);
+```
+
+#### `andThen`
+
+`andThen` adapts proc to value in `Just` when maybe is `Just`, other times this return maybe.
+
+```js
+// it will return new Maybe.Just(2)
+maybe.$( new Maybe.Just(1) ).andThen(v => new Maybe.Just(v + 1));
+```
+
+#### `withDefault`
+
+`withDefault` unwarps Maybe by default value. The default value is adapted when maybe is not `Just`.
+
+```js
+// it will return 100
+maybe.$( new Maybe.Nothing(1) ).map(v => v + 1).withDefault(100);
 ```
 
 ## Option
