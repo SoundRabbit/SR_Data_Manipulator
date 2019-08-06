@@ -1,11 +1,12 @@
 {
   "name": "sr-enum",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Implementation of Enum and Pipeline for JS",
   "main": "source/main.js",
   "scripts": {
     "test": "mocha",
-    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js"
+    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js",
+    "postinstall": "npm link && npm link sr-enum"
   },
   "repository": {
     "type": "git",
