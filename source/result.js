@@ -1,5 +1,6 @@
 const { Enum } = require("./enum");
 const { match } = require("./match");
+const util = require("./util");
 
 const Result = new Enum("Ok", "Err");
 
@@ -25,7 +26,7 @@ const andThen = proc => result =>
 
 const withDefault = val => result =>
     match(result).with({
-        [Result.$Ok]: val => util.maybeFunction(proc)(val),
+        [Result.$Ok]: util.lazy,
         [Result.$Err]: util.always(val)
     });
 
@@ -43,5 +44,11 @@ const boolean = result =>
 
 module.exports = {
     Result,
-    promise
+    promise,
+    $,
+    map,
+    andThen,
+    withDefault,
+    promise,
+    boolean
 };

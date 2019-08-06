@@ -26,7 +26,7 @@ const andThen = proc => option =>
 
 const withDefault = val => option =>
     match(option).with({
-        [Option.$Some]: val => util.maybeFunction(proc)(val),
+        [Option.$Some]: util.lazy,
         [Option.$None]: util.always(val)
     });
 
