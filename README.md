@@ -150,13 +150,13 @@ assert(b === 100);
 
 ### boolean
 
-**This function is under testing, and implemented on only Maybe now**
+**This function is under testing**
 
 `maybe.boolean : Maybe -> Boolean`
 
 ### method chain
 
-**This function is under testing, and implemented on only Maybe now**
+**This function is under testing**
 
 #### usage
 
