@@ -51,7 +51,7 @@ const andThen = proc => maybe =>
 
 const withDefault = val => maybe =>
     match(maybe).with({
-        [Maybe.$Just]: v => v,
+        [Maybe.$Just]: util.lazy,
         _: util.always(val)
     });
 
