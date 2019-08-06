@@ -27,6 +27,24 @@ describe("readme", () => {
             // "$" + [tag name] means Sybom of each tags
             assert(foo.tag === OriginalEnum.$You); //true
         });
+        it("2", () => {
+            const { Maybe, maybe } = require("../source/main");
+            const res = [
+                maybe
+                    .$(new Maybe.Just(1))
+                    .map(v => v + 1)
+                    .map(v => v + 1)
+                    .map(v => v + 1)
+                    .withDefault(0),
+                maybe
+                    .$(new Maybe.Just(1))
+                    .andThen(_ => new Maybe.Nothing())
+                    .withDefault(0)
+            ];
+
+            assert(res[0] === 4);
+            assert(res[1] === 0);
+        });
     });
 
     describe("Maybe", () => {
