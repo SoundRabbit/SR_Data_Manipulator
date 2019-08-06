@@ -23,4 +23,40 @@ describe("Result", () => {
             assert.equal(res, 0);
         });
     });
+
+    describe("#map", () => {
+        it("should 1", () => {
+            const res = result
+                .$(new Result.Ok(1))
+                .map(v => v + 1)
+                .map(v => v - 1)
+                .withDefault(10);
+            assert.equal(res, 1);
+        });
+        it("should 1", () => {
+            const res = result
+                .$(new Result.Err())
+                .map(v => v + 1)
+                .withDefault(1);
+            assert.equal(res, 1);
+        });
+    });
+
+    describe("#andThen", () => {
+        it("should 1", () => {
+            const res = result
+                .$(new Result.Ok(1))
+                .andThen(v => new Result.Ok(v + 1))
+                .andThen(v => new Result.Ok(v - 1))
+                .withDefault(10);
+            assert.equal(res, 1);
+        });
+        it("should 1", () => {
+            const res = result
+                .$(new Result.Err())
+                .andThen(v => new Result.Ok(v + 1))
+                .withDefault(1);
+            assert.equal(res, 1);
+        });
+    });
 });
