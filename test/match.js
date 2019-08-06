@@ -36,4 +36,4 @@ describe("#match", () => {
         });
         assert.equal(res, 13);
     });
-})
+});

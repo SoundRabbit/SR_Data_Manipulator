@@ -25,7 +25,7 @@ const match = enumerator => ({
             return await maybeFunction(candidate["_"])(enumerator.value);
         }
         throw "no candidate was matched.";
-    },
+    }
 });
 
 module.exports = { match };
