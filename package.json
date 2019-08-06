@@ -1,6 +1,6 @@
 {
   "name": "sr-enum",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Implementation of Enum and Pipeline for JS",
   "main": "source/main.js",
   "scripts": {
