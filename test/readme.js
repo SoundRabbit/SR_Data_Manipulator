@@ -28,7 +28,7 @@ describe("readme", () => {
             assert(foo.tag === OriginalEnum.$You); //true
         });
         it("2", () => {
-            const { Maybe, maybe } = require("sr-enum");
+            const { Maybe, maybe } = require("../source/main");
             const res = [
                 maybe
                     .$(new Maybe.Just(1))
