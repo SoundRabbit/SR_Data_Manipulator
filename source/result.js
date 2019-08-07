@@ -9,7 +9,8 @@ const $ = result => ({
     andThen: proc => $(andThen(proc)(result)),
     withDefault: val => withDefault(val)(result),
     promise: () => promise(result),
-    boolean: () => boolean(result)
+    boolean: () => boolean(result),
+    get: () => result
 });
 
 const map = proc => result =>

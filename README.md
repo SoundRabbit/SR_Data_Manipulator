@@ -86,7 +86,7 @@ You can import all modules as follows.
 
 ``` js
 // Enum
-import {Enum, match, maybe, option, result, Maybe, Option, Result} from "sr-data-manipulator";
+import {Enum, match, maybe, option, result, Maybe, Option, Result} from "sr-enum";
 ```
 
 ## What's this
@@ -156,6 +156,98 @@ const baz = match(mayBeFoo).with({
 assert(baz === "Others")
 ```
 
+## mehods and propaties in `Enumerator`
+
+### `value` : any
+
+The value each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.value === 112358);
+```
+
+### `name` : string
+
+The tag name each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.name === "Foo");
+```
+
+### `tag` : Symbol
+
+The tag symbol each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.tag === EnumType.$Foo);
+```
+
+### `index` : number
+
+The index each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+
+assert((new EnumType.Foo(112358)).index === 0);
+assert((new EnumType.Bar(112358)).index === 1);
+assert((new EnumType.Baz(112358)).index === 2);
+assert((new EnumType.Qux(112358)).index === 3);
+```
+
+### `is` : function(Symbol) -> boolean
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.is(EnumType.$Foo));
+assert(! foo.is(EnumType.$Bar));
+```
+
+### `to` : function(Enum) -> Enumerator
+
+map Enumerator to other Enumerator by index.
+
+sample
+
+```js
+const State = new Enum("First", "Second", "Third", "Last");
+const StateInv = new Enum("Last", "Third", "Second", "First");
+
+assert((new State.First()).to(StateInv).name === "Last");
+assert((new State.Second()).to(StateInv).name === "Third");
+assert((new State.Third()).to(StateInv).name === "Second");
+assert((new State.Last()).to(StateInv).name === "First");
+```
+
+### `mapWith` : function( function(Enumerator) -> any ) -> any
+
+map Enumerator to other value with mapper.
+
+### `wrapWith` : function( function(Enumerator) -> wrapper ) -> wrapper
+
+wrap Enumerator. wrapper should has "get" mehod to unwrap.
+
 ## buildin enum
 
 ### `Maybe`
@@ -182,11 +274,18 @@ const Option = new Enum("Ok", "Err");
 
 `maybe.$` , `option.$` and `result.$` can make method chain for each enumerators.
 
-sample with Maybe
+sample with Maybe - 1
 
 ```js
 const {maybe} = require("sr-enum");
 const methodChain = maybe.$( /*some maybe value*/ );
+```
+
+sample with Maybe - 2
+
+```js
+const {maybe} = require("sr-enum");
+const methodChain = ( /*some maybe value*/ ).wrapWith(maybe.$);
 ```
 
 #### `map(function | value)`
