@@ -10,6 +10,23 @@ class Enumerator {
     is(tag) {
         return this.tag == tag;
     }
+
+    to(Enum) {
+        return new (Enum.$$[this.index])(this.value);
+    }
+
+    mapWith(mapper) {
+        return mapper(this);
+    }
+
+    wrapWith(wrapper) {
+        const wrapped = wrapper(this);
+        if (typeof wrapped == "object" && "get" in wrapped && typeof wrapped.get == "function") {
+            return wrapped;
+        } else {
+            throw `wrapped enumerator: ${wrapped} should has get method.`;
+        }
+    }
 }
 
 module.exports = {

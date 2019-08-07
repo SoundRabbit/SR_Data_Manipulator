@@ -34,7 +34,9 @@ const $ = maybe => ({
      * convert to Boolean
      * @returns {Boolean}
      */
-    boolean: () => boolean(maybe)
+    boolean: () => boolean(maybe),
+
+    get: () => maybe,
 });
 
 const map = proc => maybe =>
