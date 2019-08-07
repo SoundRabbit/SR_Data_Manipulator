@@ -3,7 +3,7 @@ const assert = require("assert");
 describe("readme", () => {
     describe("Intro", () => {
         it("1", () => {
-            const { Enum } = require("../source/main");
+            const { Enum, match } = require("../source/main");
 
             const OriginalEnum = new Enum(
                 "You",
@@ -26,6 +26,21 @@ describe("readme", () => {
 
             // "$" + [tag name] means Sybom of each tags
             assert(foo.tag === OriginalEnum.$You); //true
+
+            // match
+            const isFoo = match(foo).with({
+                // [Enum].$[Enumerator] is tag for enumerator.
+                [OriginalEnum.$You]: v => v + " !!",
+                [OriginalEnum.$Can]: v => v + " !",
+                [OriginalEnum.$Make]: v => v + ".",
+                [OriginalEnum.$Original]: v => v + " ??",
+                [OriginalEnum.$Enum]: v => v + " ?",
+                [OriginalEnum.$Class]: v => v + "!?",
+                // in this case, default pattern will match foo is not enumerator of OriginalEnum
+                _: _ => "foo is not enumerator of OriginalEnum"
+            });
+
+            assert(isFoo == "Each enumeratior can have a value !!");
         });
         it("2", () => {
             const { Maybe, maybe } = require("../source/main");

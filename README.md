@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/SoundRabbit/SR_Enum_JS.svg?branch=master)](https://travis-ci.org/SoundRabbit/SR_Enum_JS)
 
 ``` js
-const { Enum } = require("sr-enum");
+const { Enum, match } = require("sr-enum"); //or: import {Enum, match} from "sr-enum";
 
 const OriginalEnum = new Enum(
     "You",
@@ -14,6 +14,7 @@ const OriginalEnum = new Enum(
     "Class"
 );
 
+// [Enum].[Enumerator] is constructor for enumerator.
 const foo = new OriginalEnum.You(
     "Each enumeratior can have a value"
 );
@@ -22,10 +23,25 @@ const foo = new OriginalEnum.You(
 assert(foo.name === "You");
 
 // .tag property returns Symbol of own tag
-assert(foo.tag !== Symbol("You")); //false
+assert(foo.tag !== Symbol("You"));
 
 // "$" + [tag name] means Sybom of each tags
-assert(foo.tag === OriginalEnum.$You); //true
+assert(foo.tag === OriginalEnum.$You);
+
+// match
+const isFoo = match(foo).with({
+    // [Enum].$[Enumerator] is tag for enumerator.
+    [OriginalEnum.$You]: v => v + " !!",
+    [OriginalEnum.$Can]: v => v + " !",
+    [OriginalEnum.$Make]: v => v + ".",
+    [OriginalEnum.$Original]: v => v + " ??",
+    [OriginalEnum.$Enum]: v => v + " ?",
+    [OriginalEnum.$Class]: v => v + "!?",
+    // in this case, default pattern will match foo is not enumerator of OriginalEnum
+    _: _ => "\"foo\" is not enumerator of OriginalEnum"
+});
+
+assert(isFoo == "Each enumeratior can have a value !!");
 ```
 
 ``` js
@@ -70,20 +86,41 @@ You can import all modules as follows.
 
 ``` js
 // Enum
-import {Enum, match, maybe, option, result, Maybe, Option, Result} from "sr-data-manipulator";
+import {Enum, match, maybe, option, result, Maybe, Option, Result} from "sr-enum";
 ```
 
 ## What's this
 
 This packege give you Enum.
 
-## `Enum`
+## Usage
 
-`Enum(...tags)` make enumeration. Tags should be String witch does not begin with "$" .
+### To make new enumeration type
 
-Enumeration maek enumerator by `new [enumeration].[enumerator]([value])` , and enumerator can have a value.
+To make new enumeration type, you can use `new Enum(...tags)`.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+```
+
+### To make new enumerator of an enumeration type
+
+To make new enumerator of an enumeration type, you can use `new [Enum].[Enumerator](value)`.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+```
 
 ## `match`
+
+`match([enumerator]).[with | withSync]({candidates})`
+
+sample
 
 ``` js
 const { Enum, match } = require("sr-enum");
@@ -119,101 +156,211 @@ const baz = match(mayBeFoo).with({
 assert(baz === "Others")
 ```
 
-## `Maybe`
+## mehods and propaties in `Enumerator`
 
-### definition
+### `value` : any
+
+The value each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.value === 112358);
+```
+
+### `name` : string
+
+The tag name each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.name === "Foo");
+```
+
+### `tag` : Symbol
+
+The tag symbol each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.tag === EnumType.$Foo);
+```
+
+### `index` : number
+
+The index each enumerator has.
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+
+assert((new EnumType.Foo(112358)).index === 0);
+assert((new EnumType.Bar(112358)).index === 1);
+assert((new EnumType.Baz(112358)).index === 2);
+assert((new EnumType.Qux(112358)).index === 3);
+```
+
+### `is` : function(Symbol) -> boolean
+
+sample
+
+```js
+const EnumType = new Enum("Foo", "Bar", "Baz", "Qux");
+const foo = new EnumType.Foo(112358);
+
+assert(foo.is(EnumType.$Foo));
+assert(! foo.is(EnumType.$Bar));
+```
+
+### `to` : function(Enum) -> Enumerator
+
+map Enumerator to other Enumerator by index.
+
+sample
+
+```js
+const State = new Enum("First", "Second", "Third", "Last");
+const StateInv = new Enum("Last", "Third", "Second", "First");
+
+assert((new State.First()).to(StateInv).name === "Last");
+assert((new State.Second()).to(StateInv).name === "Third");
+assert((new State.Third()).to(StateInv).name === "Second");
+assert((new State.Last()).to(StateInv).name === "First");
+```
+
+### `mapWith` : function( function(Enumerator) -> any ) -> any
+
+map Enumerator to other value with mapper.
+
+### `wrapWith` : function( function(Enumerator) -> wrapper ) -> wrapper
+
+wrap Enumerator. wrapper should has "get" mehod to unwrap.
+
+## buildin enum
+
+### `Maybe`
 
 ```js
 const Maybe = new Enum("Just", "Nothing");
 ```
 
-### `promise`
-
-`maybe.promise : Maybe -> Promise`
+### `Option`
 
 ```js
-const { Maybe, maybe } = require("sr-enum");
-
-const a = await maybe
-    .promise(new Maybe.Just(1))
-    .then(val => val * 10)
-    .catch(_ => 100);
-
-const b = await maybe
-    .promise(new Maybe.Nothing())
-    .then(val => val * 10)
-    .catch(_ => 100);
-
-assert(a === 10);
-assert(b === 100);
+const Option = new Enum("Some", "None");
 ```
 
-### boolean
+### `Result`
 
-**This function is under testing**
+```js
+const Option = new Enum("Ok", "Err");
+```
 
-`maybe.boolean : Maybe -> Boolean`
+## functions
 
-### method chain
+### `$`
 
-**This function is under testing**
+`maybe.$` , `option.$` and `result.$` can make method chain for each enumerators.
 
-#### usage
+sample with Maybe - 1
 
 ```js
 const {maybe} = require("sr-enum");
 const methodChain = maybe.$( /*some maybe value*/ );
 ```
 
-#### `map`
+sample with Maybe - 2
 
-`map` adapts proc to value in `Just` and wrap in `Just` when maybe is `Just`, other times this return maybe.
+```js
+const {maybe} = require("sr-enum");
+const methodChain = ( /*some maybe value*/ ).wrapWith(maybe.$);
+```
+
+#### `map(function | value)`
+
+`maybe.$.map` map value when enumerator is `Maybe.Just`.
+
+`option.$.map` map value when enumerator is `Option.Some`.
+
+`result.$.map` map value when enumerator is `Result.Ok`.
+
+sample with Maybe
 
 ```js
 // it will return new Maybe.Just(2)
 maybe.$( new Maybe.Just(1) ).map(v => v + 1);
 ```
 
-#### `andThen`
+#### `andThen(function | value)`
 
-`andThen` adapts proc to value in `Just` when maybe is `Just`, other times this return maybe.
+`maybe.$.andThen` chain value when enumerator is `Maybe.Just`.
+
+`option.$.andThen` chain value when enumerator is `Option.Some`.
+
+`result.$.andThen` chain value when enumerator is `Result.Ok`.
+
+sample with Maybe
 
 ```js
 // it will return new Maybe.Just(2)
 maybe.$( new Maybe.Just(1) ).andThen(v => new Maybe.Just(v + 1));
 ```
 
-#### `withDefault`
+#### `withDefault(any)`
 
-`withDefault` unwarps Maybe by default value. The default value is adapted when maybe is not `Just`.
+`withDefault` return value of enumerator with default value.
+
+sample with Maybe
 
 ```js
 // it will return 100
 maybe.$( new Maybe.Nothing(1) ).map(v => v + 1).withDefault(100);
 ```
 
-## Option
+#### `boolean`
 
-### definition
+Convert to `Boolean`.
+
+sample with Result.
 
 ```js
-const Option = new Enum("Some", "None");
+// it will return false
+result.$( new Result.Err(1) ).boolean();
+
+// it will return true
+result.$( new Result.Ok(1) ).boolean();
 ```
 
-### `promise`
+#### `promise`
 
-`option.promise : Option -> Promise`
+Convert to `Promise.resolve` or `Promise.reject`.
+
+sample with Option
 
 ```js
 const { Option, option } = require("sr-enum");
 
 const a = await option
-    .promise(new Option.Some(1))
+    .$(new Option.Some(1))
+    .promise()
     .then(val => val * 10)
     .catch(_ => 100);
 
 const b = await option
-    .promise(new Option.None())
+    .$(new Option.None())
+    .promise()
     .then(val => val * 10)
     .catch(_ => 100);
 
@@ -221,31 +368,6 @@ assert(a === 10);
 assert(b === 100);
 ```
 
-## Result
+### map, andThen, withDefault, boolean, promise
 
-### definition
-
-```js
-const Result = new Enum("Ok", "Err");
-```
-
-### `promise`
-
-`result.promise : Result -> Promise`
-
-```js
-const { Result, result } = require("sr-enum");
-
-const a = await result
-    .promise(new Result.Ok(1))
-    .then(val => val * 10)
-    .catch(_ => 100);
-
-const b = await result
-    .promise(new Result.Err("error"))
-    .then(val => val * 10)
-    .catch(val => val + "!");
-
-assert(a === 10);
-assert(b === "error!");
-```
+You can use these as not a menber of $. This is useful when you use sr_enum in context of lodash, promise methodcahin and so on.

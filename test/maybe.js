@@ -40,6 +40,14 @@ describe("Maybe", () => {
                 .withDefault(1);
             assert.equal(res, 1);
         });
+        it("should 1", () => {
+            const res = (new Maybe.Just(1))
+                .wrapWith(maybe.$)
+                .map(v => v + 1)
+                .map(v => v - 1)
+                .withDefault(10);
+            assert.equal(res, 1);
+        });
     });
 
     describe("#andThen", () => {
