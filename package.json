@@ -1,7 +1,7 @@
 {
   "name": "sr-enum",
   "version": "0.6.1",
-  "description": "Implementation of Rust and Elm like Enum for JS",
+  "description": "Implementation of Enum like Rust and Elm for JS",
   "main": "source/main.js",
   "scripts": {
     "test": "mocha",
