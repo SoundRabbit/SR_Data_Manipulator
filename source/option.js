@@ -14,34 +14,34 @@ const $ = option => ({
 });
 
 const map = proc => option =>
-    match(option).with({
-        [Option.$Some]: val => new Option.Some(util.maybeFunction(proc)(val)),
-        [Option.$None]: util.always(option)
-    });
+    match(option)(
+        [Option.Some(), val => new Option.Some(util.maybeFunction(proc)(val))],
+        [Option.None(), util.always(option)]
+    );
 
 const andThen = proc => option =>
-    match(option).with({
-        [Option.$Some]: val => util.maybeFunction(proc)(val),
-        [Option.$None]: util.always(option)
-    });
+    match(option)(
+        [Option.Some(), val => util.maybeFunction(proc)(val)],
+        [Option.None(), util.always(option)]
+    );
 
 const withDefault = val => option =>
-    match(option).with({
-        [Option.$Some]: util.lazy,
-        [Option.$None]: util.always(val)
-    });
+    match(option)(
+        [Option.Some(), util.lazy],
+        [Option.None(), util.always(val)]
+    );
 
 const promise = option =>
-    match(option).with({
-        [Option.$Some]: val => Promise.resolve(val),
-        [Option.$None]: _ => Promise.reject()
-    });
+    match(option)(
+        [Option.Some(), val => Promise.resolve(val)],
+        [Option.None(), _ => Promise.reject()]
+    );
 
 const boolean = option =>
-    match(option).with({
-        [Option.$Some]: util.always(true),
-        [Option.$None]: util.always(false)
-    });
+    match(option)(
+        [Option.Some(), util.always(true)],
+        [Option.None(), util.always(false)]
+    );
 
 module.exports = {
     Option,

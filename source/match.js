@@ -1,31 +1,20 @@
 const { maybeFunction } = require("./util");
 
-/**
- * match
- * @param {Enumerator} enumerator
- * @returns {{with: function({tag: Symbol, value:any})}}
- */
-const match = enumerator => ({
-    with: candidate => {
-        const tag = enumerator.tag;
-        if (tag in candidate) {
-            return maybeFunction(candidate[tag])(enumerator.value);
+const match = enumerator => (...candidates) => {
+    for (candidate of candidates) {
+        if (candidate.length < 2) {
+            throw new Error(
+                "there is a candidate whitch has too few arguments"
+            );
         }
-        if ("_" in candidate) {
-            return maybeFunction(candidate["_"])(enumerator.value);
+        const [m, v] = candidate[0](enumerator);
+        if (m) {
+            return maybeFunction(candidate[1])(v);
         }
-        throw "no candidate was matched.";
-    },
-    withSync: async candidate => {
-        const tag = enumerator.tag;
-        if (tag in candidate) {
-            return await maybeFunction(candidate[tag])(enumerator.value);
-        }
-        if ("_" in candidate) {
-            return await maybeFunction(candidate["_"])(enumerator.value);
-        }
-        throw "no candidate was matched.";
     }
-});
+    throw new Error("no candidate was matched.");
+};
+
+match.default = enumerator => [true, enumerator.value];
 
 module.exports = { match };

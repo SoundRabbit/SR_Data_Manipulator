@@ -108,16 +108,16 @@ describe("Enum", () => {
         const State = new Enum("First", "Second", "Third", "Last");
         const StateInv = new Enum("Last", "Third", "Second", "First");
         it(`should Last`, () => {
-            assert.equal((new State.First()).to(StateInv).name, "Last");
-        })
+            assert.equal(new State.First().to(StateInv).name, "Last");
+        });
         it(`should Third`, () => {
-            assert.equal((new State.Second()).to(StateInv).name, "Third");
-        })
+            assert.equal(new State.Second().to(StateInv).name, "Third");
+        });
         it(`should Second`, () => {
-            assert.equal((new State.Third()).to(StateInv).name, "Second");
-        })
+            assert.equal(new State.Third().to(StateInv).name, "Second");
+        });
         it(`should First`, () => {
-            assert.equal((new State.Last()).to(StateInv).name, "First");
-        })
-    })
+            assert.equal(new State.Last().to(StateInv).name, "First");
+        });
+    });
 });

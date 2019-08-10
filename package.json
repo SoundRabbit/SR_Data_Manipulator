@@ -1,11 +1,11 @@
 {
   "name": "sr-enum",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Implementation of Enum like Rust and Elm for JS",
   "main": "source/main.js",
   "scripts": {
     "test": "mocha",
-    "fmt": "prettier --tab-width 4 --write ./{source,test}/**/*.js"
+    "fmt": "prettier --tab-width 4 --insert-pragma false --write ./{source,test}/**/*.js"
   },
   "repository": {
     "type": "git",

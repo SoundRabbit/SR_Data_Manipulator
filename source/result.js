@@ -14,34 +14,34 @@ const $ = result => ({
 });
 
 const map = proc => result =>
-    match(result).with({
-        [Result.$Ok]: val => new Result.Ok(util.maybeFunction(proc)(val)),
-        [Result.$Err]: util.always(result)
-    });
+    match(result)(
+        [Result.Ok(), val => new Result.Ok(util.maybeFunction(proc)(val))],
+        [Result.Err(), util.always(result)]
+    );
 
 const andThen = proc => result =>
-    match(result).with({
-        [Result.$Ok]: val => util.maybeFunction(proc)(val),
-        [Result.$Err]: util.always(result)
-    });
+    match(result)(
+        [Result.Ok(), val => util.maybeFunction(proc)(val)],
+        [Result.Err(), util.always(result)]
+    );
 
 const withDefault = val => result =>
-    match(result).with({
-        [Result.$Ok]: util.lazy,
-        [Result.$Err]: util.always(val)
-    });
+    match(result)(
+        [Result.Ok(), util.lazy],
+        [Result.Err(), util.always(val)]
+    );
 
 const promise = result =>
-    match(result).with({
-        [Result.$Ok]: val => Promise.resolve(val),
-        [Result.$Err]: _ => Promise.reject()
-    });
+    match(result)(
+        [Result.Ok(), val => Promise.resolve(val)],
+        [Result.Err(), _ => Promise.reject()]
+    );
 
 const boolean = result =>
-    match(result).with({
-        [Result.$Ok]: util.always(true),
-        [Result.$Err]: util.always(false)
-    });
+    match(result)(
+        [Result.Ok(), util.always(true)],
+        [Result.Err(), util.always(false)]
+    );
 
 module.exports = {
     Result,
