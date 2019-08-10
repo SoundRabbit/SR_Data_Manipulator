@@ -32,7 +32,7 @@ assert(foo.tag === OriginalEnum.$You);
 
 // match
 const isFoo = match(foo)(
-    // [Enum].$[Enumerator] is tag for enumerator.
+    // [Enum].[Enumerator]() is mathcer for enumerator.
     [OriginalEnum.You(12345), v => v + " !!?"],
     [OriginalEnum.You(), v => v + " !!"],
     [OriginalEnum.Can(), v => v + " !"],
