@@ -65,7 +65,7 @@ describe("readme", () => {
 
     describe("match", () => {
         it("1", () => {
-            const { Enum, match } = require("sr-enum");
+            const { Enum, match } = require("../source/main");
 
             const FooBar = new Enum("Foo", "Bar", "Baz", "Qux");
 
