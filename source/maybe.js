@@ -36,38 +36,38 @@ const $ = maybe => ({
      */
     boolean: () => boolean(maybe),
 
-    get: () => maybe,
+    get: () => maybe
 });
 
 const map = proc => maybe =>
-    match(maybe).with({
-        [Maybe.$Just]: val => new Maybe.Just(util.maybeFunction(proc)(val)),
-        _: util.always(maybe)
-    });
+    match(maybe)(
+        [Maybe.Just(), val => new Maybe.Just(util.maybeFunction(proc)(val))],
+        [match.default, util.always(maybe)]
+    );
 
 const andThen = proc => maybe =>
-    match(maybe).with({
-        [Maybe.$Just]: val => util.maybeFunction(proc)(val),
-        _: util.always(maybe)
-    });
+    match(maybe)(
+        [Maybe.Just(), val => util.maybeFunction(proc)(val)],
+        [match.default, util.always(maybe)]
+    );
 
 const withDefault = val => maybe =>
-    match(maybe).with({
-        [Maybe.$Just]: util.lazy,
-        _: util.always(val)
-    });
+    match(maybe)(
+        [Maybe.Just(), util.lazy],
+        [match.default, util.always(val)]
+    );
 
 const promise = maybe =>
-    match(maybe).with({
-        [Maybe.$Just]: val => Promise.resolve(val),
-        [Maybe.$Nothing]: _ => Promise.reject()
-    });
+    match(maybe)(
+        [Maybe.Just(), val => Promise.resolve(val)],
+        [Maybe.Nothing(), _ => Promise.reject()]
+    );
 
 const boolean = maybe =>
-    match(maybe).with({
-        [Maybe.$Just]: util.always(true),
-        [Maybe.$Nothing]: util.always(false)
-    });
+    match(maybe)(
+        [Maybe.Just(), util.always(true)],
+        [Maybe.Nothing(), util.always(false)]
+    );
 
 module.exports = {
     Maybe,

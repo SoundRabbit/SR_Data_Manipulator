@@ -7,7 +7,7 @@ class Enum {
             const tagName = String(tag);
 
             if (tagName[0] == "$") {
-                throw `Tag name : "${stringifyTag}" has unpermitted token. Tag name should begin with a character EXCEPT '$'.`
+                throw `Tag name : "${stringifyTag}" has unpermitted token. Tag name should begin with a character EXCEPT '$'.`;
             }
 
             const tagSymbol = Symbol(tagName);

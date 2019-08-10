@@ -28,17 +28,18 @@ describe("readme", () => {
             assert(foo.tag === OriginalEnum.$You); //true
 
             // match
-            const isFoo = match(foo).with({
+            const isFoo = match(foo)(
                 // [Enum].$[Enumerator] is tag for enumerator.
-                [OriginalEnum.$You]: v => v + " !!",
-                [OriginalEnum.$Can]: v => v + " !",
-                [OriginalEnum.$Make]: v => v + ".",
-                [OriginalEnum.$Original]: v => v + " ??",
-                [OriginalEnum.$Enum]: v => v + " ?",
-                [OriginalEnum.$Class]: v => v + "!?",
+                [OriginalEnum.You(12345), v => v + " !!?"],
+                [OriginalEnum.You(), v => v + " !!"],
+                [OriginalEnum.Can(), v => v + " !"],
+                [OriginalEnum.Make(), v => v + "."],
+                [OriginalEnum.Original(), v => v + " ??"],
+                [OriginalEnum.Enum(), v => v + " ?"],
+                [OriginalEnum.Class(), v => v + "!?"],
                 // in this case, default pattern will match foo is not enumerator of OriginalEnum
-                _: _ => "foo is not enumerator of OriginalEnum"
-            });
+                [match.default, _ => "foo is not enumerator of OriginalEnum"]
+            );
 
             assert(isFoo == "Each enumeratior can have a value !!");
         });
@@ -60,6 +61,27 @@ describe("readme", () => {
             assert(res[0] === 4);
             assert(res[1] === 0);
         });
+    });
+
+    describe("match", () => {
+        it("1", () => {
+            const { Enum, match } = require("sr-enum");
+
+            const FooBar = new Enum("Foo", "Bar", "Baz", "Qux");
+
+            let mayBeFoo = new FooBar.Bar(new FooBar.Foo("Hello"));
+
+            const foo = match(mayBeFoo)(
+                [FooBar.Foo(FooBar.Bar()), v => v],
+                [FooBar.Foo("Hi"), v => v + "!"],
+                [FooBar.Bar("Hello"), v => v + "!!"],
+                [FooBar.Bar(FooBar.Foo("Hi")), v => v + "?"],
+                [FooBar.Bar(FooBar.Foo("Hello")), v => v + " SR_EM !"],
+                [match.default, v => v + "!?"]
+            )
+
+            assert.equal(foo, "Hello SR_EM !");
+        })
     });
 
     describe("Maybe", () => {

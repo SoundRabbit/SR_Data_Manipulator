@@ -1,3 +1,5 @@
+/** @format */
+
 class impl_Enumerator {
     constructor(name, symbol, index, value) {
         this.value = value;
@@ -12,7 +14,7 @@ class impl_Enumerator {
     }
 
     to(Enum) {
-        return new (Enum.$$[this.index])(this.value);
+        return new Enum.$$[this.index](this.value);
     }
 
     mapWith(mapper) {
@@ -21,7 +23,11 @@ class impl_Enumerator {
 
     wrapWith(wrapper) {
         const wrapped = wrapper(this);
-        if (typeof wrapped == "object" && "get" in wrapped && typeof wrapped.get == "function") {
+        if (
+            typeof wrapped == "object" &&
+            "get" in wrapped &&
+            typeof wrapped.get == "function"
+        ) {
             return wrapped;
         } else {
             throw `wrapped enumerator: ${wrapped} should has get method.`;
@@ -32,28 +38,29 @@ class impl_Enumerator {
 const enumerator = (name, symbol, index) => {
     const Enumerator = function (value) {
         if (this instanceof Enumerator) {
-            return (new impl_Enumerator(name, symbol, index, value));
+            return new impl_Enumerator(name, symbol, index, value);
         } else {
-            return matcher(symbol, value);
+            return matcher(symbol)(value);
         }
     };
     return Enumerator;
 };
 
-const matcher = (symbol, value) => {
+const matcher = symbol => matcher => {
     const impl_matcher = _enum => {
-        if (typeof value == "undefined") {
-            return _enum.tag == symbol;
-        } else if (value.isMatcher) {
-            return _enum.tag == symbol && value(_enum);
+        if (typeof matcher == "undefined") {
+            return [_enum.tag == symbol, _enum.value];
+        } else if (matcher.isMatcher) {
+            const [m, v] = matcher(_enum.value);
+            return [_enum.tag == symbol && m, v];
         } else {
-            return _enum.tag == symbol && _enum.value == value
+            return [_enum.tag == symbol && _enum.value == matcher, _enum.value];
         }
     };
     Object.defineProperty(impl_matcher, "isMatcher", { get: () => true });
     Object.freeze(impl_matcher);
     return impl_matcher;
-}
+};
 
 module.exports = {
     enumerator

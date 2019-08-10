@@ -1,3 +1,5 @@
+/** @format */
+
 const assert = require("assert");
 const maybe = require("../source/maybe");
 const { Maybe } = maybe;
@@ -41,7 +43,7 @@ describe("Maybe", () => {
             assert.equal(res, 1);
         });
         it("should 1", () => {
-            const res = (new Maybe.Just(1))
+            const res = new Maybe.Just(1)
                 .wrapWith(maybe.$)
                 .map(v => v + 1)
                 .map(v => v - 1)

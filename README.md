@@ -31,17 +31,18 @@ assert(foo.tag !== Symbol("You"));
 assert(foo.tag === OriginalEnum.$You);
 
 // match
-const isFoo = match(foo).with({
+const isFoo = match(foo)(
     // [Enum].$[Enumerator] is tag for enumerator.
-    [OriginalEnum.$You]: v => v + " !!",
-    [OriginalEnum.$Can]: v => v + " !",
-    [OriginalEnum.$Make]: v => v + ".",
-    [OriginalEnum.$Original]: v => v + " ??",
-    [OriginalEnum.$Enum]: v => v + " ?",
-    [OriginalEnum.$Class]: v => v + "!?",
+    [OriginalEnum.You(12345), v => v + " !!?"],
+    [OriginalEnum.You(), v => v + " !!"],
+    [OriginalEnum.Can(), v => v + " !"],
+    [OriginalEnum.Make(), v => v + "."],
+    [OriginalEnum.Original(), v => v + " ??"],
+    [OriginalEnum.Enum(), v => v + " ?"],
+    [OriginalEnum.Class(), v => v + "!?"],
     // in this case, default pattern will match foo is not enumerator of OriginalEnum
-    _: _ => "\"foo\" is not enumerator of OriginalEnum"
-});
+    [match.default, _ => "foo is not enumerator of OriginalEnum"]
+);
 
 assert(isFoo == "Each enumeratior can have a value !!");
 ```
@@ -120,7 +121,13 @@ const foo = new EnumType.Foo(112358);
 
 ## `match`
 
-`match([enumerator]).[with | withSync]({candidates})`
+definition: `match: enumerator -> candidates -> any`
+
+syntax: `match([enumerator])({candidates})`
+
+candidates: `[candidate]`
+
+candidate: `[mathcer, process]`
 
 sample
 
@@ -129,33 +136,18 @@ const { Enum, match } = require("sr-enum");
 
 const FooBar = new Enum("Foo", "Bar", "Baz", "Qux");
 
-let mayBeFoo = mayBeFoo = new FooBar.Foo("hello");
+let mayBeFoo = new FooBar.Bar(new FooBar.Foo("Hello"));
 
-const foo = match(mayBeFoo).with({
-    [Foobar.$Foo]   : val =? val + " SR_D_M !", // when foo.tag() equals to Foobar.$Foo
-    [Foobar.$Bar]   : val => val,               // when foo.tag() equals to Foobar.$Bar
-    _               : _ => "others"             // "_" means default
-});
-
-let mayBeFoo = mayBeFoo = new FooBar.Foo("Hello");
-
-const foo = match(mayBeFoo).with({
-    [Foobar.$Foo]   : val =? val + " SR_D_M !", // when foo.tag() equals to Foobar.$Foo
-    [Foobar.$Bar]   : val => val,               // when foo.tag() equals to Foobar.$Bar
-    _               : _ => "Others"             // "_" means default
-});
+const foo = match(mayBeFoo)(
+    [FooBar.Foo(FooBar.Bar()),          v => v],
+    [FooBar.Foo("Hi"),                  v => v + "!"],
+    [FooBar.Bar("Hello"),               v => v + "!!"],
+    [FooBar.Bar(FooBar.Foo("Hi")),      v => v + "?"],
+    [FooBar.Bar(FooBar.Foo("Hello")),   v => " SR_EM !"],
+    [match.default,                     v => v + v "!?"]
+)
 
 assert(foo === "Hello SR_D_M !");
-
-const mayBeFoo = new FooBar.Baz("Hello");
-
-const baz = match(mayBeFoo).with({
-    [Foobar.$Foo]   : val =? val + " SR_D_M !", // when foo.tag() equals to Foobar.$Foo
-    [Foobar.$Bar]   : val => val,               // when foo.tag() equals to Foobar.$Bar
-    _               : _ => "Others"             // "_" means default
-});
-
-assert(baz === "Others")
 ```
 
 ## mehods and propaties in `Enumerator`
