@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/SoundRabbit/SR_Enum_JS.svg?branch=master)](https://travis-ci.org/SoundRabbit/SR_Enum_JS)
 
-**In next version (version: 0.7.0), `match` will be disruptively changed**
+**`match` was disruptively changed from version 0.6**
 
 ``` js
 const { Enum, match } = require("sr-enum"); //or: import {Enum, match} from "sr-enum";
