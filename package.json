@@ -1,6 +1,6 @@
 {
   "name": "sr-enum",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Implementation of Enum like Rust and Elm for JS",
   "main": "source/main.js",
   "scripts": {
