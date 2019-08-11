@@ -147,7 +147,7 @@ const foo = match(mayBeFoo)(
     [match.default,                     v => v + v "!?"]
 )
 
-assert(foo === "Hello SR_D_M !");
+assert(foo === "Hello SR_EM !");
 ```
 
 ## mehods and propaties in `Enumerator`
