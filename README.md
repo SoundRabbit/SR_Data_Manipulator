@@ -2,11 +2,20 @@
 
 [![Build Status](https://travis-ci.org/SoundRabbit/SR_Enum_JS.svg?branch=master)](https://travis-ci.org/SoundRabbit/SR_Enum_JS)
 
-**`match` was disruptively changed from version 0.6**
-
 ``` js
-const { Enum, match } = require("sr-enum"); //or: import {Enum, match} from "sr-enum";
+const { Enum, match, unMatched } = require("sr-enum"); //or: import {Enum, match} from "sr-enum";
 
+// this means
+//
+// ```
+// enum OriginalEnum {
+//     You: any,
+//     Can: any,
+//     .
+//     .
+//     .
+// };
+// ```
 const OriginalEnum = new Enum(
     "You",
     "Can",
@@ -30,21 +39,33 @@ assert(foo.tag !== Symbol("You"));
 // "$" + [tag name] means Sybom of each tags
 assert(foo.tag === OriginalEnum.$You);
 
-// match
+// pattern match
 const isFoo = match(foo)(
     // [Enum].$[Enumerator] is tag for enumerator.
     [OriginalEnum.You(12345), v => v + " !!?"],
-    [OriginalEnum.You(), v => v + " !!"],
+    [OriginalEnum.You(), _ => "matched !!"],
     [OriginalEnum.Can(), v => v + " !"],
     [OriginalEnum.Make(), v => v + "."],
     [OriginalEnum.Original(), v => v + " ??"],
     [OriginalEnum.Enum(), v => v + " ?"],
     [OriginalEnum.Class(), v => v + "!?"],
     // in this case, default pattern will match foo is not enumerator of OriginalEnum
-    [match.default, _ => "foo is not enumerator of OriginalEnum"]
+    [match.default, _ => "matched !!"]
 );
 
 assert(isFoo == "Each enumeratior can have a value !!");
+
+// pattern match - 2
+let isFoo_2;
+if(OriginalEnum.You(12345)(foo) !== unMatched) {
+    isFoo_2 = "foo is You(12345)";
+}else if(OriginalEnum.You()(foo) !== unMatched) {
+    isFoo_2 = "foo is You( not 12345 )";
+}else {
+    isFoo_2 = "unmatched !!";
+}
+
+assert(isFoo_2 == "foo is You( not 12345 )";
 ```
 
 ``` js
