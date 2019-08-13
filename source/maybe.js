@@ -52,10 +52,7 @@ const andThen = proc => maybe =>
     );
 
 const withDefault = val => maybe =>
-    match(maybe)(
-        [Maybe.Just(), util.lazy],
-        [match.default, util.always(val)]
-    );
+    match(maybe)([Maybe.Just(), util.lazy], [match.default, util.always(val)]);
 
 const promise = maybe =>
     match(maybe)(

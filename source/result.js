@@ -26,10 +26,7 @@ const andThen = proc => result =>
     );
 
 const withDefault = val => result =>
-    match(result)(
-        [Result.Ok(), util.lazy],
-        [Result.Err(), util.always(val)]
-    );
+    match(result)([Result.Ok(), util.lazy], [Result.Err(), util.always(val)]);
 
 const promise = result =>
     match(result)(
