@@ -3,7 +3,7 @@ const maybe = require("./maybe");
 const option = require("./option");
 const result = require("./result");
 const { match } = require("./match");
-const {unMatched} = require("./enumerator");
+const { unMatched } = require("./enumerator");
 
 module.exports = {
     Enum,
