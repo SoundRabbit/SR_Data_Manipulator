@@ -1,5 +1,3 @@
-/** @format */
-
 class impl_Enumerator {
     constructor(name, symbol, index, value) {
         this.value = value;
@@ -36,7 +34,7 @@ class impl_Enumerator {
 }
 
 const enumerator = (name, symbol, index) => {
-    const Enumerator = function (value) {
+    const Enumerator = function(value) {
         if (this instanceof Enumerator) {
             return new impl_Enumerator(name, symbol, index, value);
         } else {
@@ -46,15 +44,19 @@ const enumerator = (name, symbol, index) => {
     return Enumerator;
 };
 
+const unMatched = Symbol("unMatched");
+
 const matcher = symbol => matcher => {
     const impl_matcher = _enum => {
         if (typeof matcher == "undefined") {
-            return [_enum.tag == symbol, _enum.value];
+            return _enum.tag == symbol ? _enum.value : unMatched;
         } else if (matcher.isMatcher) {
-            const [m, v] = matcher(_enum.value);
-            return [_enum.tag == symbol && m, v];
+            const v = matcher(_enum.value);
+            return _enum.tag == symbol ? v : unMatched;
         } else {
-            return [_enum.tag == symbol && _enum.value == matcher, _enum.value];
+            return _enum.tag == symbol && _enum.value == matcher
+                ? _enum.value
+                : unMatched;
         }
     };
     Object.defineProperty(impl_matcher, "isMatcher", { get: () => true });
@@ -63,5 +65,6 @@ const matcher = symbol => matcher => {
 };
 
 module.exports = {
-    enumerator
+    enumerator,
+    unMatched
 };

@@ -78,10 +78,10 @@ describe("readme", () => {
                 [FooBar.Bar(FooBar.Foo("Hi")), v => v + "?"],
                 [FooBar.Bar(FooBar.Foo("Hello")), v => v + " SR_EM !"],
                 [match.default, v => v + "!?"]
-            )
+            );
 
             assert.equal(foo, "Hello SR_EM !");
-        })
+        });
     });
 
     describe("Maybe", () => {
