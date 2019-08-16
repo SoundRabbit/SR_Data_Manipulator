@@ -14,19 +14,13 @@ const OriginalEnum = new Enum(
     "Class"
 );
 
+
 // [Enum].[Enumerator] is constructor for enumerator.
+
 const foo = new OriginalEnum.You(
     "Each enumeratior can have a value"
 );
 
-// .name property returns own tag name
-assert(foo.name === "You");
-
-// .tag property returns Symbol of own tag
-assert(foo.tag !== Symbol("You"));
-
-// "$" + [tag name] means Sybom of each tags
-assert(foo.tag === OriginalEnum.$You);
 
 // match with object - 1
 
@@ -39,7 +33,10 @@ const matchWithObject_1 = match(foo)({
 
 assert(matchWithObject_1 === 10);
 
+
 // match with object - 2
+//
+// "$" + [tag name] means Symbol of each tags
 
 const matchWithObject_2 = match(foo)({
         [OriginalEnum.$You] : _ => 20,
@@ -49,6 +46,7 @@ const matchWithObject_2 = match(foo)({
     });
 
 assert(matchWithObject_2 === 20);
+
 
 // match with pattern matcher
 
@@ -62,7 +60,44 @@ const matchWithPatternMatcher = match(foo)(
 
 assert(matchWithPatternMatcher === 32);
 
+
+// using pattern macher with assignment
+//
+// "unMached" is Symbol which is returned when pattern is not matched.
+//
+// This can be used like "if let" in Rust
+//   exapmle:
+//   const a = SomeEnum.Foo()(a);
+//   if (a !== unMatched) {
+//     // process when a is Foo
+//   }
+
+const assignment_1 = OriginalEnum.You()(foo);
+const assignment_2 = OriginalEnum.Can()(foo);
+const assignment_3 = OriginalEnum.Make()(foo);
+
+assert(assignment_1 === "Each enumeratior can have a value");
+assert(assignment_2 === unMatched);
+assert(assignment_3 === unMatched);
+
+
+// using pattern matcher with if
+
+let usingPatternMatcherWithIf = 0;
+if(OriginalEnum.You(57)(foo) !== unMatched) {
+    usingPatternMatcherWithIf = 1;
+}else if(OriginalEnum.You(OriginalEnum.Can())(foo) !== unMatched) {
+    usingPatternMatcherWithIf = 2;
+}else if(OriginalEnum.You()(foo) !== unMatched) {
+    usingPatternMatcherWithIf = 3;
+}
+
+assert(usingPatternMatcherWithIf === 3);
+
+
 // using with switch
+//
+// ! This is not recommended. It is recommended to use match. !
 
 let usingWithSwitch = 0;
 
@@ -81,30 +116,6 @@ switch(foo.name) {
 }
 
 assert(usingWithSwitch === 1);
-
-// using pattern matcher with if
-
-let usingPatternMatcherWithIf = 0;
-if(OriginalEnum.You(57)(foo) !== unMatched) {
-    usingPatternMatcherWithIf = 1;
-}else if(OriginalEnum.You(OriginalEnum.Can())(foo) !== unMatched) {
-    usingPatternMatcherWithIf = 2;
-}else if(OriginalEnum.You()(foo) !== unMatched) {
-    usingPatternMatcherWithIf = 3;
-}
-
-assert(usingPatternMatcherWithIf === 3);
-
-// using pattern macher with assignment
-
-const assignment_1 = OriginalEnum.You()(foo);
-const assignment_2 = OriginalEnum.Can()(foo);
-const assignment_3 = OriginalEnum.Make()(foo);
-
-assert(assignment_1 === "Each enumeratior can have a value");
-assert(assignment_2 === unMatched);
-assert(assignment_3 === unMatched);
-
 ```
 
 ``` js
