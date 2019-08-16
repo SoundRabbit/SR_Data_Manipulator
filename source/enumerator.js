@@ -34,7 +34,7 @@ class impl_Enumerator {
 }
 
 const enumerator = (name, symbol, index) => {
-    const Enumerator = function(value) {
+    const Enumerator = function (value) {
         if (this instanceof Enumerator) {
             return new impl_Enumerator(name, symbol, index, value);
         } else {

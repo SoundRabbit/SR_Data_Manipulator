@@ -5,17 +5,6 @@
 ``` js
 const { Enum, match, unMatched } = require("sr-enum"); //or: import {Enum, match} from "sr-enum";
 
-// this means
-//
-// ```
-// enum OriginalEnum {
-//     You: any,
-//     Can: any,
-//     .
-//     .
-//     .
-// };
-// ```
 const OriginalEnum = new Enum(
     "You",
     "Can",
@@ -39,33 +28,73 @@ assert(foo.tag !== Symbol("You"));
 // "$" + [tag name] means Sybom of each tags
 assert(foo.tag === OriginalEnum.$You);
 
-// pattern match
-const isFoo = match(foo)(
-    // [Enum].[Enumerator]() is mathcer for enumerator.
-    [OriginalEnum.You(12345), v => v + " !!?"],
-    [OriginalEnum.You(), _ => "matched !!"],
-    [OriginalEnum.Can(), v => v + " !"],
-    [OriginalEnum.Make(), v => v + "."],
-    [OriginalEnum.Original(), v => v + " ??"],
-    [OriginalEnum.Enum(), v => v + " ?"],
-    [OriginalEnum.Class(), v => v + "!?"],
-    // in this case, default pattern will match foo is not enumerator of OriginalEnum
-    [match.default, _ => "matched !!"]
+// match with object - 1
+
+const matchWithObject_1 = match(foo)({
+        You : _ => 10,
+        Can : _ => 11,
+        Make : _ => 12,
+        default: _ => 13
+    });
+
+assert(matchWithObject_1 === 10);
+
+// match with object - 2
+
+const matchWithObject_2 = match(foo)({
+        [OriginalEnum.$You] : _ => 20,
+        [OriginalEnum.$Can] : _ => 21,
+        [OriginalEnum.$Make] : _ => 22,
+        default: _ => 13
+    });
+
+assert(matchWithObject_2 === 20);
+
+// match with pattern matcher
+
+const matchWithPatternMatcher = match(foo)(
+    [OriginalEnum.You(57), _ => 30],
+    [OriginalEnum.You(OriginalEnum.Can()), _ => 31],
+    [OriginalEnum.You("Each enumeratior can have a value"), _ => 32],
+    [OriginalEnum.You(), _ => 33],
+    [match.default, _ => 34]
 );
 
-assert(isFoo == "Each enumeratior can have a value !!");
+assert(matchWithPatternMatcher === 32);
 
-// pattern match - 2
-let isFoo_2;
-if(OriginalEnum.You(12345)(foo) !== unMatched) {
-    isFoo_2 = "foo is You(12345)";
-}else if(OriginalEnum.You()(foo) !== unMatched) {
-    isFoo_2 = "foo is You( not 12345 )";
-}else {
-    isFoo_2 = "unmatched !!";
+// using with switch
+
+let usingWithSwitch = 0;
+
+switch(foo.name) {
+    case "You":
+        usingWithSwitch = 1;
+        break;
+    case "Can":
+        usingWithSwitch = 2;
+        break;
+    case "Make":
+        usingWithSwitch = 3;
+        break;
+    default:
+        usingWithSwitch = 4;
 }
 
-assert(isFoo_2 == "foo is You( not 12345 )";
+assert(usingWithSwitch === 1);
+
+// using pattern matcher with if
+
+let usingPatternMatcherWithIf = 0;
+if(OriginalEnum.You(57)(foo) !== unMatched) {
+    usingPatternMatcherWithIf = 1;
+}else if(OriginalEnum.You(OriginalEnum.Can())(foo) !== unMatched) {
+    usingPatternMatcherWithIf = 2;
+}else if(OriginalEnum.You()(foo) !== unMatched) {
+    usingPatternMatcherWithIf = 3;
+}
+
+assert(usingPatternMatcherWithIf === 3);
+
 ```
 
 ``` js
@@ -92,10 +121,6 @@ assert(res[1] === 0);
 ```bash
 > npm install sr-enum
 ```
-
-## Caution
-
-This module is beta-version. It means that the module probably will be in radical changing.
 
 ## require / import
 
@@ -142,33 +167,46 @@ const foo = new EnumType.Foo(112358);
 
 ## `match`
 
-definition: `match: enumerator -> candidates -> any`
+### syntax
 
-syntax: `match([enumerator])({candidates})`
+match with object
 
-candidates: `[candidate]`
+```js
 
-candidate: `[mathcer, process]`
+// matching with priority: (1st) tag, (2nd) name, (3rd) default
 
-sample
+match(/*enumerator*/)({
+    /*tag or name*/ : /*function which is run when enumerator is matched*/,
+    /*tag or name*/ : /*function which is run when enumerator is matched*/,
+    /*tag or name*/ : /*function which is run when enumerator is matched*/,
+    /*tag or name*/ : /*function which is run when enumerator is matched*/,
+    default         : /*function which is run when enumerator is unmatched*/,
+})
 
-``` js
-const { Enum, match } = require("sr-enum");
+////////////////////////////////////////////////////////////////////////////////
 
-const FooBar = new Enum("Foo", "Bar", "Baz", "Qux");
+// matcing with priority: order of arguments
 
-let mayBeFoo = new FooBar.Bar(new FooBar.Foo("Hello"));
-
-const foo = match(mayBeFoo)(
-    [FooBar.Foo(FooBar.Bar()),          v => v],
-    [FooBar.Foo("Hi"),                  v => v + "!"],
-    [FooBar.Bar("Hello"),               v => v + "!!"],
-    [FooBar.Bar(FooBar.Foo("Hi")),      v => v + "?"],
-    [FooBar.Bar(FooBar.Foo("Hello")),   v => " SR_EM !"],
-    [match.default,                     v => v + v "!?"]
+match(/*enumerator*/)(
+    {/*tag or name*/ : /*function which is run when enumerator is matched*/},
+    {/*tag or name*/ : /*function which is run when enumerator is matched*/},
+    {/*tag or name*/ : /*function which is run when enumerator is matched*/},
+    {/*tag or name*/ : /*function which is run when enumerator is matched*/},
+    {default         : /*function which is run when enumerator is unmatched*/},
 )
 
-assert(foo === "Hello SR_EM !");
+```
+
+match with pettern matcher
+
+```js
+match(/*enumerator*/)(
+    [/*pattern matcher*/, /*function which is run when enumerator is matched*/],
+    [/*pattern matcher*/, /*function which is run when enumerator is matched*/],
+    [/*pattern matcher*/, /*function which is run when enumerator is matched*/],
+    [/*pattern matcher*/, /*function which is run when enumerator is matched*/],
+    [match.default      , /*function which is run when enumerator is unmatched*/]
+)
 ```
 
 ## mehods and propaties in `Enumerator`
