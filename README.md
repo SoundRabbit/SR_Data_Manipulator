@@ -95,6 +95,16 @@ if(OriginalEnum.You(57)(foo) !== unMatched) {
 
 assert(usingPatternMatcherWithIf === 3);
 
+// using pattern macher with assignment
+
+const assignment_1 = OriginalEnum.You()(foo);
+const assignment_2 = OriginalEnum.Can()(foo);
+const assignment_3 = OriginalEnum.Make()(foo);
+
+assert(assignment_1 === "Each enumeratior can have a value");
+assert(assignment_2 === unMatched);
+assert(assignment_3 === unMatched);
+
 ```
 
 ``` js
