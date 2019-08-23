@@ -13,13 +13,7 @@
   },
   "keywords": [
     "enum",
-    "enumerate",
-    "enumerator",
-    "maybe",
-    "option",
-    "result",
-    "chain",
-    "match"
+    "pattern match"
   ],
   "author": "neunyan",
   "license": "Apache-2.0",
