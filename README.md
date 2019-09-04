@@ -3,7 +3,8 @@
 [![Build Status](https://travis-ci.org/SoundRabbit/SR_Enum_JS.svg?branch=master)](https://travis-ci.org/SoundRabbit/SR_Enum_JS)
 
 ``` js
-const { Enum, match, unMatched } = require("sr-enum"); //or: import {Enum, match} from "sr-enum";
+const { Enum, match, unMatched } = require("sr-enum");
+//or: import {Enum, match} from "sr-enum";
 
 const OriginalEnum = new Enum(
     "You",
@@ -120,6 +121,7 @@ assert(usingWithSwitch === 1);
 
 ``` js
 const { Maybe, maybe } = require("sr-enum");
+
 const res = [
     maybe
         .$(new Maybe.Just(1))   // create method chain
@@ -135,6 +137,17 @@ const res = [
 
 assert(res[0] === 4);
 assert(res[1] === 0);
+```
+
+```js
+// using maybe with promise
+const { maybe } = require("sr-enum");
+
+const res =
+    await a_promise_function()
+        .then(maybe.map(v => process(v)))
+        .then(maybe.andthen(v => another_promise_function(v)))
+        .then(maybe.map(v => process(v)));
 ```
 
 ## How to install
