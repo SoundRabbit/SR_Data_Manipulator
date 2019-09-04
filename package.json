@@ -1,6 +1,6 @@
 {
   "name": "sr-enum",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Implementation of pattern matchable Enum for JS",
   "main": "source/main.js",
   "scripts": {
