@@ -1,18 +1,26 @@
+const name_ = Symbol("name");
+const tag_ = Symbol("tag");
+const index_ = Symbol("index");
+const value_ = Symbol("value");
+
 class impl_Enumerator {
     constructor(name, symbol, index, value) {
-        this.value = value;
-        this.name = name;
+        this[value_] = value;
+        this[name_] = name;
+        this[tag_] = symbol;
+        this[index_] = index;
         this.tag = symbol;
-        this.index = index;
+        this.name = name;
         Object.freeze(this);
     }
 
     is(tag) {
-        return this.tag == tag;
+        return this[tag_] == tag;
     }
 
     to(Enum) {
-        return new Enum.$$[this.index](this.value);
+        const index = this[index_]
+        return new Enum.$$[index](this[value_]);
     }
 
     mapWith(mapper) {
@@ -49,13 +57,13 @@ const unMatched = Symbol("unMatched");
 const matcher = symbol => matcher => {
     const impl_matcher = _enum => {
         if (typeof matcher == "undefined") {
-            return _enum.tag == symbol ? _enum.value : unMatched;
+            return _enum[tag_] == symbol ? _enum[value_] : unMatched;
         } else if (matcher.isMatcher) {
-            const v = matcher(_enum.value);
-            return _enum.tag == symbol ? v : unMatched;
+            const v = matcher(_enum[value_]);
+            return _enum[tag_] == symbol ? v : unMatched;
         } else {
-            return _enum.tag == symbol && _enum.value == matcher
-                ? _enum.value
+            return _enum[tag_] == symbol && _enum[value_] == matcher
+                ? _enum[value_]
                 : unMatched;
         }
     };
@@ -66,5 +74,9 @@ const matcher = symbol => matcher => {
 
 module.exports = {
     enumerator,
-    unMatched
+    unMatched,
+    name_,
+    tag_,
+    index_,
+    value_
 };

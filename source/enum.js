@@ -1,4 +1,4 @@
-const { enumerator: impl_enumerator } = require("./enumerator");
+const { enumerator: enumeratorGen } = require("./enumerator");
 
 class Enum {
     constructor(...tags) {
@@ -11,7 +11,7 @@ class Enum {
             }
 
             const tagSymbol = Symbol(tagName);
-            const enumerator = impl_enumerator(tagName, tagSymbol, tagIndex);
+            const enumerator = enumeratorGen(tagName, tagSymbol, tagIndex);
             this[tagName] = enumerator;
             this["$$"].push(enumerator);
             this["$$tag"] = tagSymbol;
